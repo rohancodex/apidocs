@@ -1,0 +1,249 @@
+openapi: "3.0.0"
+info:
+  title: learn express and swagger docs 
+  description: learning express and api documentation using swagger
+  version: 1.0.1
+  contact: 
+    email: rohancodex@gmail.com
+    url: "https://rohandesai.me"
+
+# servers: 
+#   - url: "https://localhost:3000/api/v1"
+#     description: for localhost - secure
+#   - url: "https://localhost:3000/api/v1"
+#     description: for localhost - regular
+    
+servers: 
+  - url: "{protocol}://localhost:3000/api/{version}"
+    description: for localhost {protocol}
+    variables: 
+      version: 
+        enum:
+          - v1 
+          - v2
+        default: v1
+      protocol: 
+        enum:
+          - http 
+          - https
+        default: http
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+paths:
+  /apidocs:
+    get:
+      tags:
+        - String
+      summary: returns a greet message
+      responses:
+        200:
+          description: All good and success 
+          content: 
+            application/json:
+              schema: 
+                type: string
+                example: "mystring"
+        400:
+          description: bad request
+        500:
+          description: internal server error
+    
+  
+  /someobject:
+    get:
+      tags:
+        - Object
+      summary: returns an object
+      responses:
+        200:
+          description: All good and success 
+          content: 
+            application/json:
+              schema: 
+                type: json
+                properties:
+                  id:
+                    type: string
+                  name: 
+                    type: string
+                  price: 
+                    type: string
+                example: {id: "01",name: "Learn Reactjs", price: "1000"}
+        400:
+          description: bad request
+        500:
+          description: internal server error
+
+  /courses:
+    get:
+      tags:
+        - Array
+      summary: returns an array of courses
+      responses:
+        200:
+          description: All good and success 
+          content: 
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name: 
+                      type: string
+                    price: 
+                      type: string
+                example: [{id: "01",name: "Learn Reactjs", price: "1000"},{id: "02",name: "Learn Node", price: "1000"}]
+        400:
+          description: bad request
+        500:
+          description: internal server error
+  
+  /mycourse/{courseId}:
+    get:
+      tags:
+        - String
+      summary: returns a course based on request id
+      parameters: 
+        - name : courseId
+          in:  path
+          required: true
+          default: 02
+          schema : 
+            type: string
+            properties:
+                id:
+                  type: string
+                name: 
+                  type: string
+                price: 
+                  type: string
+      responses:
+        200:
+          description: All good and success 
+          content: 
+            application/json:
+              schema : 
+                type: object
+              properties:
+                id:
+                  type: string
+                name: 
+                  type: string
+                price: 
+                  type: string 
+              example: {id: "02",name: "Learn Node", price: "1000"}
+        400:
+          description: bad request
+        500:
+          description: internal server error
+
+  /addcourse:
+    post:
+      tags:
+        - String
+      summary: posts a request for creating a course 
+      consumes: 
+        - application/json
+      produces:
+        - application/json   
+      
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                name: 
+                  type: string
+                price: 
+                  type: string 
+              
+      responses:
+        200:
+          description: All good and success 
+          content: 
+            application/json:
+              schema : 
+                type: boolean
+              
+        400:
+          description: bad request
+        500:
+          description: internal server error
+  
+  /coursequery:
+    get:
+      tags:
+        - String
+      summary: learning about a query
+      parameters:
+        - name:  location
+          in: query
+          required: true
+          schema: 
+            type: string
+            enum: [delhi,new york, mumbai] 
+        - name:  device
+          in: query
+          required: true
+          schema: 
+            type: string
+            enum: [web,mobile]      
+      responses:
+        200:
+          description: All good and success 
+          content: 
+            application/json:
+              schema : 
+                type: object
+              properties:
+                location:
+                  type: string
+                device: 
+                  type: string
+                
+              example: {id: "02",name: "Learn Node", price: "1000"}
+        400:
+          description: bad request
+        500:
+          description: internal server error
+  
+  /courseupload:
+    post:
+      tags:
+        - String
+      summary: uploadiing course image
+      parameters:
+        - in: header
+          name: auth
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file: 
+                  type: string
+                  format: binary      
+      responses:
+        200:
+          description: All good and success 
+          
+        400:
+          description: bad request
+        500:
+          description: internal server error
